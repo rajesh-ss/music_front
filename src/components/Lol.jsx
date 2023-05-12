@@ -87,92 +87,140 @@ const Lol = () => {
     ss();
   };
 
-  const handleUpload = (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("image", picture);
-    async function dem() {
-      await axios
-        .post("http://127.0.0.1:5000/image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST",
-            "Access-Control-Allow-Headers": "Content-Type",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          setEmotion(response["data"]);
-          console.log(emotion);
-        })
-        .then((err) => console.log(err));
-    }
-    dem();
-  };
+  const handleUpload = (event)=>{
+  event.preventDefault();
+  const formData = new FormData();
+  formData.append("image", picture);
+  async function dem() {
+    await axios
+      .post("http://127.0.0.1:5000/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setEmotion(response["data"]);
+        console.log(emotion);
+      })
+      .then((err) => console.log(err));
+  }
+  dem();
+  }
+
 
   console.log(audio);
   return (
     <div
       className="w-100 h-100 d-flex flex-column justify-content-center align-items-center p-0"
-      style={{ border: "0px solid black", padding:"0px" }}
+      style={{ border: "0px solid black", padding: "0px" }}
     >
       <h1 className="mb-5 text-center">Emotion Based Music player</h1>
-      <div 
-      className="w-25 d-flex flex-column justify-content-center align-items-center"
-      style={{ border: "2px solid black", padding:"10px", borderRadius:"10px", minWidth:"450px" }}>
+      <div
+        className="w-25 d-flex flex-column justify-content-center align-items-center"
+        style={{
+          border: "2px solid black",
+          padding: "10px",
+          borderRadius: "10px",
+          minWidth: "450px",
+        }}
+      >
+        <h2>You are {emotion}</h2>
 
-      
-      
-      <h2>You are {emotion}</h2>
+        <div>
+          <Webcam
+            audio={false}
+            height={300}
+            ref={webcamRef}
+            width={300}
+            screenshotFormat="image/png"
+            videoConstraints={videoConstraints}
+            // style={{border: "5px solid black"}}
+          />
+        </div>
 
-      <div>
-        <Webcam
-          audio={false}
-          height={300}
-          
-          ref={webcamRef}
-          width={300}
-          screenshotFormat="image/png"
-          videoConstraints={videoConstraints}
-          // style={{border: "5px solid black"}}
-        />
-      </div>
-      <div style={{border: "1px solid black", borderRadius: "10px", margin:"10px", minWidth: "350px", display:"flex", justifyContent: "space-around"}}>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            capture();
+        <div
+          style={{
+            border: "1px solid black",
+            borderRadius: "10px",
+            margin: "10px",
+            minWidth: "350px",
+            display: "flex",
+            justifyContent: "space-around",
           }}
-          className="btn btn-danger mt-3"
-          style={{width:"100px", height: "40px"}}
-        >Capture</button>
-        <button 
-        className="btn btn-primary my-3" 
-        style={{width:"200px", height: "40px"}}
-        onClick={handleUpload}>
-        send my image
-      </button>
+        >
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              capture();
+            }}
+            className="btn btn-danger mt-3"
+            style={{ width: "100px", height: "40px" }}
+          >
+            Capture
+          </button>
+          <button
+            className="btn btn-primary my-3"
+            style={{ width: "200px", height: "40px" }}
+            onClick={handleUpload}
+          >
+            send my image
+          </button>
 
-        {/* <img src={picture} /> */}
-      </div>
-  
-      {/* <audio  controls >
+          {/* <img src={picture} /> */}
+        </div>
+
+        {/* <audio  controls >
         <source src={audio} type="audio/mp3"/>
         </audio> */}
-      <div style={{border: "1px solid black", borderRadius: "10px", padding:"10px 0px",margin:"10px", minWidth: "350px", display:"flex", justifyContent: "space-around", flexDirection:"column", alignItems:"center"}}>
-        <p style={{borderBottom:"1px solid black"}}>{`playing.... ${emotion} song for you`}</p>
-        <audio src={audio} ref={audioRef} controls style={{color: "red"}}/>
-        <div>
-          <button style={{border: "1px solid black",margin:"10px", backgroundColor: "#40bf40"}} onClick={handlePlay}>Play {" |>"}</button>
-          <button style={{border: "1px solid black",margin:"10px", backgroundColor: "#ff3300"}} onClick={handlePause}>Pause {"||"}</button>
+        <div
+          style={{
+            border: "1px solid black",
+            borderRadius: "10px",
+            padding: "10px 0px",
+            margin: "10px",
+            minWidth: "350px",
+            display: "flex",
+            justifyContent: "space-around",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <p
+            style={{ borderBottom: "1px solid black" }}
+          >{`playing.... ${emotion} song for you`}</p>
+          <audio src={audio} ref={audioRef} controls style={{ color: "red" }} />
+          <div>
+            <button
+              style={{
+                border: "1px solid black",
+                margin: "10px",
+                backgroundColor: "#40bf40",
+              }}
+              onClick={handlePlay}
+            >
+              Play {" |>"}
+            </button>
+            <button
+              style={{
+                border: "1px solid black",
+                margin: "10px",
+                backgroundColor: "#ff3300",
+              }}
+              onClick={handlePause}
+            >
+              Pause {"||"}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <button className="btn btn-primary " onClick={findSong}>
-        {/* // onClick={getSong}> */}
-       {"<-- ("} get Song {")  -->"}
-      </button>
+        <button className="btn btn-primary " onClick={findSong}>
+          {/* // onClick={getSong}> */}
+          {"<-- ("} get Song {")  -->"}
+        </button>
       </div>
     </div>
   );
